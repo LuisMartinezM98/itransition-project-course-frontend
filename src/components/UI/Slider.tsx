@@ -1,27 +1,25 @@
-import { useSlider } from '../../Providers/Providers';
+import { useAuth, useSlider } from '../../Providers/Providers';
 
 const Slider = () => {
 
     const { isOpen, openSidebar } = useSlider();
+    const { user, logOut  } = useAuth();
 
     return (
         <>
-            {/* Fondo negro */}
             <div
                 className={`fixed inset-0 z-30 bg-black transition-opacity duration-500 ease-in-out 
                     ${isOpen ? 'opacity-50' : 'opacity-0 pointer-events-none'}
                 `}
                 onClick={openSidebar}
             />
-
-            {/* Slider */}
             <aside
                 className={`text-xl h-full bg-white border-l-8 border-blue-says w-[319px] top-0 right-0 z-50 fixed p-10 flex flex-col gap-4 transform transition-transform duration-500 ease-in-out
                     ${isOpen ? 'translate-x-0' : 'translate-x-full'}
                 `}
                 onClick={(e) => e.stopPropagation()}
             >
-                <p className='font-bold'>Hi <span className='text-blue-says'>Luis!</span></p>
+                <p className='font-bold'>Hi <span className='text-blue-says'>{user?.name.split(' ')[0]}!</span></p>
 
                 <p className='hover:text-blue-says transition-colors ease-in-out delay-100 duration-300 cursor-pointer font-semibold'>My Account</p>
 
@@ -29,7 +27,7 @@ const Slider = () => {
 
                 <p className='hover:text-blue-says transition-colors ease-in-out delay-100 duration-300 cursor-pointer font-semibold'>Other Surveys</p>
 
-                <p className='hover:text-blue-says transition-colors ease-in-out delay-100 duration-300 cursor-pointer font-semibold mt-20'>Log Out</p>
+                <p className='hover:text-blue-says transition-colors ease-in-out delay-100 duration-300 cursor-pointer font-semibold mt-20' onClick={logOut}>Log Out</p>
             </aside>
         </>
     );

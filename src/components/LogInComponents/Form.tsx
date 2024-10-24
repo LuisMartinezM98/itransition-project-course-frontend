@@ -3,6 +3,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Icon from "react-icons-kit";
 import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { eye } from "react-icons-kit/feather/eye";
+import { AxiosError, AxiosResponse } from "axios";
+import clienteAxios from "../../config/clienteAxios";
+
+import { useAuth } from "../../Providers/Providers";
 
 interface LogInData {
   email: string;
@@ -28,6 +32,8 @@ const Form = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  const { setToken, setUser } = useAuth();
+
   const {
     register: logInRegister,
     handleSubmit: handleLogInSubmit,
@@ -48,9 +54,15 @@ const Form = () => {
       return;
     }
     try {
-      console.log("Data enviada", data);
+      const dataBack : AxiosResponse = await clienteAxios.post('/users/log-in', data);
+      setToken(dataBack.data.token);
+      setUser(dataBack.data.user);
     } catch (error) {
-      console.log(error);
+      if (error instanceof AxiosError) {
+        setErrorMessage(error.response?.data.msg);
+        return;
+      }
+      return console.log(error);
     }
   };
 
@@ -63,9 +75,17 @@ const Form = () => {
     }
     try {
       const { repeatPassword, ...restData } = data;
-      console.log("Data send: ", restData);
+      const dataBack: AxiosResponse = await clienteAxios.post(
+        "users/sign-up",
+        restData
+      );
+      setSuccessMessage(dataBack.data.msg);
     } catch (error) {
-      console.log(error);
+      if(error instanceof AxiosError){
+        setErrorMessage(error.response?.data.msg);
+        return;
+      }
+      return console.log(error);
     }
   };
 
@@ -86,6 +106,15 @@ const Form = () => {
       setErrorMessage("");
     }, 3000);
   }, [errorMessage]);
+
+  useEffect(() => {
+    if(successMessage.length > 0){
+      setTimeout(() => {
+        setSuccessMessage('')
+        window.location.reload();
+      }, 3000)
+    }
+  }, [successMessage])
 
   const handleToggleForm = () => {
     setSignUp(!signUp);

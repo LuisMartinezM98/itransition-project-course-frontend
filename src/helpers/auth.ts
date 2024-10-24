@@ -1,7 +1,7 @@
-import {jwtDecode, type JwtPayload } from 'jwt-decode';
-export const isAuthenticated = (): boolean => {
-  const token = localStorage.getItem('authToken');
-  if (!token) return false; 
+import { jwtDecode, type JwtPayload } from 'jwt-decode';
+
+export const isAuthenticated = (token: string): boolean => {
+  if (!token) return false;
 
   try {
     const decoded = jwtDecode<JwtPayload>(token);
@@ -11,6 +11,6 @@ export const isAuthenticated = (): boolean => {
     return true;
   } catch (error) {
     console.error("Error decoding token:", error);
-    return false; 
+    return false;
   }
 };
