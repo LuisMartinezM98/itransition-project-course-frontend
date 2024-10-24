@@ -6,26 +6,31 @@ import { ModalCreateQuestion } from "../../../components/NewSurvey/ModalCreateQu
 import { useQuestion } from "../../../Providers/Providers";
 import clienteAxios from "../../../config/clienteAxios";
 import { AxiosError, AxiosResponse } from "axios";
+import { useAuth } from "../../../Providers/Providers";
+import { config } from "../../../config/clienteAxios";
 
 const NewSurvey = () => {
-  const [questions, setQuestions] = useState([]);
   const [isOpen, setIsopen] = useState(false);
+  const [numberUsers, setNumberUsers] = useState(0);
+  const [topic, setTopic] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const { setTypesQuestion, newQuestions } = useQuestion();
 
+  const { token } = useAuth();
+
   const handleSelectValue = (topic: string) => {
-    // setSelectedTopic(topic); // Puedes manejar el valor seleccionado aquí
-    console.log("Selected topic:", topic); // Para fines de depuración
+    setTopic(topic);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = parseInt(e.target.value);
-
-    // Controlar que el número no supere 1000
     if (!isNaN(inputValue) && inputValue <= 1000) {
-      // setValue(inputValue);
+      setNumberUsers(inputValue);
     } else if (e.target.value === "") {
-      // setValue(""); // Permitir borrar el valor
+      setNumberUsers(0); 
     }
   };
 
@@ -49,6 +54,43 @@ const NewSurvey = () => {
     };
     getTypesQuestion();
   }, []);
+  
+  const handleCreateForm = async () => {
+    if([topic, title, description].includes('')){
+      alert('Please complete each input')
+      return;
+    }
+    if(newQuestions.length === 0){
+      alert('Please write some questions for this form');
+      return;
+    }
+    try {
+
+      const formData = {
+        topic,
+        title,
+        description,
+        newQuestions,
+        numberUsers
+      }
+
+      const configObj = config(token)
+
+      const form: AxiosResponse = await clienteAxios.post('/form/create-form',formData, configObj);
+
+      setSuccessMessage(form.data.msg);
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000)
+
+    } catch (error) {
+      if(error instanceof AxiosError){
+        return console.log('Error Axios', error)
+      }
+      return console.log(error)
+    }
+  }
 
   return (
     <div className="p-10">
@@ -70,6 +112,13 @@ const NewSurvey = () => {
       </article>
       <article className="mt-20 border-t-2 border-blue-says">
         <h2 className="text-2xl font-bold mt-4">New Template</h2>
+        {successMessage.trim().length > 0 && (
+          <div className="flex justify-center items-center">
+          <span className="bg-green-600 text-white p-2 rounded-md my-4 text-center">
+            {successMessage}
+          </span>
+        </div>
+        )}
         <section>
           <form className="flex flex-col gap-4 md:justify-center md:items-center">
             <label className="font-bold">Topic</label>
@@ -78,6 +127,7 @@ const NewSurvey = () => {
               id="topic"
               onChange={(e) => handleSelectValue(e.target.value)}
               className="bg-blue-says text-white p-2 rounded-lg text-center"
+              value={topic}
             >
               <option value={""}>-- Select a Topic --</option>
               {Object.keys(Topics).map((key) => (
@@ -94,6 +144,8 @@ const NewSurvey = () => {
                   className="bg-blue-says rounded-lg p-2 text-white text-center w-1/2"
                   max={100}
                   placeholder="Title Form"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
                 />
               </div>
               <div className="flex flex-col gap-2 justify-center items-center w-full">
@@ -102,10 +154,23 @@ const NewSurvey = () => {
                   type="number"
                   className="bg-blue-says rounded-lg p-2 text-white text-center w-1/2"
                   max={1000}
+                  value={numberUsers}
                   placeholder="0"
+                  onChange={handleChange}
                 />
               </div>
             </div>
+            <div className="flex flex-col gap-2 justify-center items-center w-full">
+                <label className="font-semibold">Description</label>
+                <input
+                  type="text"
+                  className="bg-blue-says rounded-lg p-2 text-white text-center w-1/2"
+                  max={100}
+                  placeholder="Description"
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                />
+              </div>
             <div className="flex flex-col gap-4">
               <p className="text-2xl font-bold">Questions</p>
               {newQuestions.length > 0 && (
@@ -127,6 +192,7 @@ const NewSurvey = () => {
               >
                 Add Question
               </button>
+              <button onClick={handleCreateForm}type="button" className="p-2 bg-green-600 rounded-lg text-white font-semibold">Create Form</button>
             </div>
           </form>
         </section>

@@ -46,7 +46,7 @@ const Dashboard = () => {
           <p className="text-2xl font-semibold">Your last Survey</p>
           { survey?.id_form ? (
             <>
-              <p className="text-blue-says font-semibold">Are you single?</p>
+              <p className="text-blue-says font-semibold">{survey.title}</p>
               <LastSurvey />
             </>
           ) :

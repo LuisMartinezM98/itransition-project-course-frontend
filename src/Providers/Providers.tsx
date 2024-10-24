@@ -6,20 +6,16 @@ import {
   useEffect,
 } from "react";
 import Cookies from "js-cookie";
-import { AxiosResponse, AxiosError } from "axios";
 import type {
   User,
   Form,
-  Topics,
   Question,
   newQuestion,
-  Option,
   newOption,
   Type_question,
   Answer,
   newForm,
 } from "../types/types";
-import clienteAxios from "../config/clienteAxios";
 
 interface SliderContextType {
   isOpen: boolean;
@@ -58,12 +54,19 @@ interface SurveyContextType {
   setNewSurvey: (obj: newForm) => void;
 }
 
+interface AnswerContexType {
+  setAnswers: (arr: Answer[]) => void;
+  answers: Answer[];
+}
+
 const SliderContext = createContext<SliderContextType | undefined>(undefined);
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const QuestionContext = createContext<QuestionContextType | undefined>(
   undefined
 );
 const SurveyContext = createContext<SurveyContextType | undefined>(undefined);
+
+const AnswerContext = createContext<AnswerContexType | undefined>(undefined);
 
 
 
@@ -80,6 +83,10 @@ interface SurveysProviderProps {
 }
 
 interface QuestionProviderProps {
+  children: ReactNode;
+}
+
+interface AnswerProviderProps {
   children: ReactNode;
 }
 
@@ -250,6 +257,20 @@ export const QuestionProvider = ({ children }: QuestionProviderProps) => {
   );
 };
 
+export const AnswerProvider = ({children}: AnswerProviderProps) => {
+  const [answers, setAnswersState] = useState<Answer[]>([]);
+
+  const setAnswers = (arr: Answer[]) => {
+    setAnswersState(arr);
+  }
+
+  return (
+    <AnswerContext.Provider value={{answers, setAnswers}}>
+      {children}
+    </AnswerContext.Provider>
+  )
+}
+
 export const useSlider = () => {
   const context = useContext(SliderContext);
   if (!context) {
@@ -270,6 +291,14 @@ export const useQuestion = () => {
   const context = useContext(QuestionContext);
   if(!context){
     throw new Error("useSurvey must be used within SurveyProvider");
+  }
+  return context;
+}
+
+export const useAnswers = () => {
+  const context = useContext(AnswerContext);
+  if(!context){
+    throw new Error('useAnswer must be used within AnswerProvider');
   }
   return context;
 }

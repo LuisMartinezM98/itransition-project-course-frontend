@@ -1,6 +1,4 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
 
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -13,6 +11,7 @@ import {
   AuthProvider,
   QuestionProvider,
   SurveysProvider,
+  AnswerProvider
 } from "./Providers/Providers.tsx";
 import Survey from "./pages/ProtectedRoutes/Survey.tsx";
 import NewSurvey from "./pages/ProtectedRoutes/Surveys/NewSurvey.tsx";
@@ -23,10 +22,6 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     errorElement: <ErrorPage />,
     children: [
-      {
-        path: "/",
-        element: <App />,
-      },
       {
         path: "dashboard",
         element: <Dashboard />,
@@ -52,7 +47,9 @@ createRoot(document.getElementById("root")!).render(
     <AuthProvider>
       <QuestionProvider>
         <SurveysProvider>
-          <RouterProvider router={router} />
+          <AnswerProvider>
+            <RouterProvider router={router} />
+          </AnswerProvider>
         </SurveysProvider>
       </QuestionProvider>
     </AuthProvider>

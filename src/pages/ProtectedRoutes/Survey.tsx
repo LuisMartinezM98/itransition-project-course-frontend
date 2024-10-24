@@ -1,11 +1,11 @@
 
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import {iosBody} from 'react-icons-kit/ionicons/iosBody'
 import Icon from "react-icons-kit";
 
 
 const Survey = () => {
-  const { id } = useParams<{ id: string }>();
+  // const { id } = useParams<{ id: string }>();
 
   return (
     <div className="p-10 flex flex-col gap-4">

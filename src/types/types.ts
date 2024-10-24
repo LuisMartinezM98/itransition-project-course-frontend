@@ -20,13 +20,16 @@ export enum Topics {
 }
 
 export interface Form {
-  id_form: number;
-  user_id: number;
+  id_form: string;
+  user_id: string;
   open: boolean;
   limit: number;
+  description: string,
+  title: string,
   created_at: string;
   updated_at: string;
   topic: Topics;
+  questions: Question[]
 }
 
 export interface newForm {
@@ -35,10 +38,11 @@ export interface newForm {
 }
 
 export interface Question {
-    id_question: number;
-    form_id: number;
-    question: string;
-    type_question: number;
+    id_question: string;
+    form_id: string;
+    question_text: string;
+    type_question: Type_question;
+    options: Option[];
 }
 
 export interface newQuestion {
@@ -53,9 +57,9 @@ export interface Type_question{
 }
 
 export interface Option {
-    id_option: number;
+    id_option: string;
     question_id: number;
-    option: string;
+    option_text: string;
 }
 
 
@@ -64,9 +68,9 @@ export interface newOption {
 }
 
 export interface Answer {
-    id_answer: number;
-    question_id: number;
-    option_id?: number;
-    user_id: number;
+    id_answer: string;
+    question_id: string;
+    option_id?: string;
+    user_id: string;
     answer?: string;
 }
