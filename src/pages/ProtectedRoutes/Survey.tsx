@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import clienteAxios, { config } from "../../config/clienteAxios";
 import { useAuth, useSurvey } from "../../Providers/Providers";
 import { AxiosResponse } from "axios";
@@ -10,6 +10,7 @@ const Survey = () => {
 
   const { token } = useAuth();
   const { setSurvey, survey } = useSurvey();
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const fetchSurvey = async () => {
@@ -26,6 +27,20 @@ const Survey = () => {
     fetchSurvey();
   }, []);
 
+  const handleShareSurvey = async () => {
+    const surveyLink = `${import.meta.env.VITE_FRONTEND_URL}/survey/ask-survey/${id}`;
+
+    const tempInput = document.createElement('input');
+    tempInput.value = surveyLink;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <div className="p-10 flex flex-col gap-4">
       <div className="flex justify-end mb-10">
@@ -36,6 +51,8 @@ const Survey = () => {
         <p className="text-blue-says font-semibold">By: {survey?.name}</p>
       </div>
       <div>
+        <p className="p-2 underline text-blue-says cursor-pointer" onClick={handleShareSurvey}>Share Survey</p>
+        {copied && <p className="text-green-500">Link copied to clipboard!</p>} 
         <p className="font-thin">Topic: </p>
         <div className="flex justify-between">
           <p>{survey?.topic}</p>
