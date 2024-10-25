@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { isAuthenticated } from '../helpers/auth';
 import { useAuth } from '../Providers/Providers';
 import Header from '../components/UI/Header';
@@ -6,6 +6,7 @@ import Footer from '../components/UI/Footer';
 
 const ProtectedRoute: React.FC = () => {
   const { token } = useAuth(); 
+  const location = useLocation();
 
   return isAuthenticated(token) ? (
     <>
@@ -14,7 +15,7 @@ const ProtectedRoute: React.FC = () => {
       <Footer />
     </>
   ) : (
-    <Navigate to="/login" />
+    <Navigate to="/login" state={{ from: location }} replace />
   );
 };
 

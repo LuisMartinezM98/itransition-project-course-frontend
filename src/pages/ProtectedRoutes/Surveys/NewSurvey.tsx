@@ -6,7 +6,7 @@ import { ModalCreateQuestion } from "../../../components/NewSurvey/ModalCreateQu
 import { useQuestion } from "../../../Providers/Providers";
 import clienteAxios from "../../../config/clienteAxios";
 import { AxiosError, AxiosResponse } from "axios";
-import { useAuth } from "../../../Providers/Providers";
+import { useAuth, useSurvey } from "../../../Providers/Providers";
 import { config } from "../../../config/clienteAxios";
 
 const NewSurvey = () => {
@@ -20,6 +20,7 @@ const NewSurvey = () => {
   const { setTypesQuestion, newQuestions } = useQuestion();
 
   const { token } = useAuth();
+  const { surveys } = useSurvey();
 
   const handleSelectValue = (topic: string) => {
     setTopic(topic);
@@ -104,9 +105,15 @@ const NewSurvey = () => {
               msOverflowStyle: "none",
             }}
           >
-            <li>
-              <PrevSurbey />
-            </li>
+            {Array.isArray(surveys) && surveys.length > 0 ? (
+            surveys.map(item => (
+              <li key={item.id_form}>
+                <PrevSurbey survey={item} />
+              </li>
+            ))
+          ) : (
+            <p>No surveys available</p>
+          )}
           </ul>
         </section>
       </article>

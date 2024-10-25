@@ -1,9 +1,12 @@
 import { useAuth, useSlider } from '../../Providers/Providers';
+import { useNavigate } from 'react-router-dom';
 
 const Slider = () => {
 
     const { isOpen, openSidebar } = useSlider();
     const { user, logOut  } = useAuth();
+
+    const navigate = useNavigate();
 
     return (
         <>
@@ -23,7 +26,7 @@ const Slider = () => {
 
                 <p className='hover:text-blue-says transition-colors ease-in-out delay-100 duration-300 cursor-pointer font-semibold'>My Account</p>
 
-                <p className='hover:text-blue-says transition-colors ease-in-out delay-100 duration-300 cursor-pointer font-semibold'>My Surveys</p>
+                <p className='hover:text-blue-says transition-colors ease-in-out delay-100 duration-300 cursor-pointer font-semibold' onClick={() => navigate('/survey/my-surveys')}>My Surveys</p>
 
                 <p className='hover:text-blue-says transition-colors ease-in-out delay-100 duration-300 cursor-pointer font-semibold'>Other Surveys</p>
 

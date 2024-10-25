@@ -1,20 +1,23 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Importa useLocation
 import Form from "../components/LogInComponents/Form";
 import { isAuthenticated } from '../helpers/auth';
-import { useAuth } from '../Providers/Providers'; // Call useAuth here
+import { useAuth } from '../Providers/Providers';
 
 const LogIn = () => {
   const navigate = useNavigate();
-  const { token } = useAuth(); // Get the token here
+  const location = useLocation();
+  const { token } = useAuth(); 
+
+  const from = location.state?.from?.pathname || "/dashboard"; 
 
   useEffect(() => {
     document.title = "SurveySays Project | Log In";
 
     if (isAuthenticated(token)) {
-      navigate('/dashboard');
+      navigate(from, { replace: true });
     }
-  }, [navigate, token]);
+  }, [navigate, token, from]);
 
   return (
     <div className="flex flex-col md:flex-row items-center justify-center gap-2 px-10 py-20">

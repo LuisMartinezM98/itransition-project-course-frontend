@@ -15,6 +15,8 @@ import {
 } from "./Providers/Providers.tsx";
 import Survey from "./pages/ProtectedRoutes/Survey.tsx";
 import NewSurvey from "./pages/ProtectedRoutes/Surveys/NewSurvey.tsx";
+import AnswerSurvey from "./pages/ProtectedRoutes/Surveys/AnswerSurvey.tsx";
+import MySurveys from "./pages/ProtectedRoutes/Surveys/MySurveys.tsx";
 
 const router = createBrowserRouter([
   {
@@ -27,13 +29,21 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "survey/:id",
+        path: "survey/show-survey/:id",
         element: <Survey />,
       },
       {
         path: "survey/new-survey",
         element: <NewSurvey />,
       },
+      {
+        path: "survey/ask-survey/:id",
+        element: <AnswerSurvey/>
+      },
+      {
+        path: "survey/my-surveys",
+        element: <MySurveys/>
+      }
     ],
   },
   {

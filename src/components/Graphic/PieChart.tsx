@@ -1,6 +1,7 @@
 import { PieChart as MUIPieChart } from "@mui/x-charts/PieChart";
 import type { Question, Answer } from "../../types/types";
 import { useAnswers } from "../../Providers/Providers";
+import { useMediaQuery } from "@mui/material"; 
 
 interface PieChartProps {
   question?: Question;
@@ -8,6 +9,7 @@ interface PieChartProps {
 
 const PieChart = ({ question }: PieChartProps) => {
   const { answers } = useAnswers();
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
 
   if (!question) {
     return <p>No question selected</p>;
@@ -35,16 +37,21 @@ const PieChart = ({ question }: PieChartProps) => {
     return <p>Any answers yet</p>;
   }
 
+  const chartWidth = isSmallScreen ? 350 : 400;
+  const chartHeight = isSmallScreen ? 150 : 200;
+
   return (
-    <MUIPieChart
-      series={[
-        {
-          data: optionCounts,
-        },
-      ]}
-      width={400}
-      height={200}
-    />
+    // <div style={{ padding: '16px' }}> {/* Añadimos padding al contenedor */}
+      <MUIPieChart
+        series={[
+          {
+            data: optionCounts,
+          },
+        ]}
+        width={chartWidth}
+        height={chartHeight}
+      />
+    // </div>
   );
 };
 

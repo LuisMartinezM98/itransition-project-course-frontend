@@ -24,6 +24,8 @@ export interface Form {
   user_id: string;
   open: boolean;
   limit: number;
+  name: string,
+  email: string,
   description: string,
   title: string,
   created_at: string;
@@ -54,6 +56,7 @@ export interface newQuestion {
 export interface Type_question{
     id_type_question: string;
     type_question: string;
+    type_name?: string;
 }
 
 export interface Option {
@@ -73,4 +76,6 @@ export interface Answer {
     option_id?: string;
     user_id: string;
     answer?: string;
+    user: User;
+    question: Question;
 }
