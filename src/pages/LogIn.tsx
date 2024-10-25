@@ -13,9 +13,12 @@ const LogIn = () => {
 
   useEffect(() => {
     document.title = "SurveySays Project | Log In";
-
     if (isAuthenticated(token)) {
-      navigate(from, { replace: true });
+      if (from === '/') {
+        navigate('/dashboard', { replace: true });
+      } else {
+        navigate(from, { replace: true });
+      }
     }
   }, [navigate, token, from]);
 
