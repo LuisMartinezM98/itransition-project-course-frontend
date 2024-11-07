@@ -27,7 +27,7 @@ const LastSurvey = () => {
           `/answer/get-answers?id_question=${selectedQuestion.id_question}`,
           configObj
         );
-        if(getAnswers.status === 204){
+        if (getAnswers.status === 204) {
           return;
         }
         setAnswers(getAnswers.data);
@@ -39,10 +39,6 @@ const LastSurvey = () => {
       setSelectedQuestionState(undefined);
     }
   };
-
-  // if(answers.length === 0) return (
-  //    <p>Any answers yet</p>
-  // )
 
   return (
     <div className="flex flex-col gap-5 md:flex-row">
@@ -66,23 +62,23 @@ const LastSurvey = () => {
         "675aa799-c8ce-49ff-b783-2f401ae839e1",
         "ee2e80d2-e1b1-42a3-bc77-812e444f5c68",
       ].includes(typeQuestion || "") ? (
-        <PieChart question={selectedQuestionState} /> // Pasamos la pregunta seleccionada (puede ser undefined)
+        <PieChart question={selectedQuestionState} />
       ) : (
         <>
-          {answers.length === 0 ?(
+          {answers.length === 0 ? (
             <p>Any answers yet</p>
-          ) :(
+          ) : (
             <div className="overflow-x-auto whitespace-nowrap">
-            {answers.map((item) => (
-              <div
-                key={item.id_answer}
-                className="inline-block border-4 border-blue-says p-2 min-w-max"
-              >
-                <p>User: {item.user.name}</p>
-                <p>Answer: {item.answer}</p>
-              </div>
-            ))}
-          </div>
+              {answers.map((item) => (
+                <div
+                  key={item.id_answer}
+                  className="inline-block border-4 border-blue-says p-2 min-w-max"
+                >
+                  <p>User: {item.user.name}</p>
+                  <p>Answer: {item.answer}</p>
+                </div>
+              ))}
+            </div>
           )}
         </>
       )}

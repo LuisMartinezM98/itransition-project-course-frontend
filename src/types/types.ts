@@ -1,9 +1,15 @@
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   last_connection: string;
   active: boolean;
+  type_account: TypeAccount
+}
+
+export interface TypeAccount {
+  id_type: string,
+  type_account: string
 }
 
 export enum Topics {
@@ -78,4 +84,15 @@ export interface Answer {
     answer?: string;
     user: User;
     question: Question;
+}
+
+export interface ContactSalesForce{
+  Email: string,
+  FirstName: string,
+  id: string,
+  LastName: string,
+  attributes: {
+    type: string,
+    url: string
+  }
 }

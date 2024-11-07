@@ -6,15 +6,16 @@ import {
   useEffect,
 } from "react";
 import Cookies from "js-cookie";
-import type {
-  User,
-  Form,
-  Question,
-  newQuestion,
-  newOption,
-  Type_question,
-  Answer,
-  newForm,
+import {
+  type User,
+  type Form,
+  type Question,
+  type newQuestion,
+  type newOption,
+  type Type_question,
+  type Answer,
+  type newForm,
+  type ContactSalesForce,
 } from "../types/types";
 
 interface SliderContextType {
@@ -59,6 +60,11 @@ interface AnswerContexType {
   answers: Answer[];
 }
 
+interface SalesForceContextType{
+  setContacts: (arr: ContactSalesForce[])=> void;
+  contacts: ContactSalesForce[];
+}
+
 const SliderContext = createContext<SliderContextType | undefined>(undefined);
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const QuestionContext = createContext<QuestionContextType | undefined>(
@@ -67,6 +73,8 @@ const QuestionContext = createContext<QuestionContextType | undefined>(
 const SurveyContext = createContext<SurveyContextType | undefined>(undefined);
 
 const AnswerContext = createContext<AnswerContexType | undefined>(undefined);
+
+const SalesForceContext = createContext<SalesForceContextType | undefined>(undefined);
 
 
 
@@ -271,6 +279,19 @@ export const AnswerProvider = ({children}: AnswerProviderProps) => {
   )
 }
 
+export const SalesForceProvider = ({children}:AnswerProviderProps) => {
+  const [contacts, setContactsState] = useState<ContactSalesForce[]>([]);
+  const setContacts = (arr: ContactSalesForce[]) => {
+    setContactsState(arr);
+  }
+
+  return(
+    <SalesForceContext.Provider value={{setContacts, contacts}}>
+      {children}
+    </SalesForceContext.Provider>
+  )
+}
+
 export const useSlider = () => {
   const context = useContext(SliderContext);
   if (!context) {
@@ -299,6 +320,14 @@ export const useAnswers = () => {
   const context = useContext(AnswerContext);
   if(!context){
     throw new Error('useAnswer must be used within AnswerProvider');
+  }
+  return context;
+}
+
+export const useSalesForce = () => {
+  const context = useContext(SalesForceContext);
+  if(!context){
+    throw new Error('useSalesForce must be used within SalesForceContext');
   }
   return context;
 }

@@ -10,12 +10,14 @@ import {
   AuthProvider,
   QuestionProvider,
   SurveysProvider,
-  AnswerProvider
+  AnswerProvider,
+  SalesForceProvider
 } from "./Providers/Providers.tsx";
 import Survey from "./pages/ProtectedRoutes/Survey.tsx";
 import NewSurvey from "./pages/ProtectedRoutes/Surveys/NewSurvey.tsx";
 import AnswerSurvey from "./pages/ProtectedRoutes/Surveys/AnswerSurvey.tsx";
 import MySurveys from "./pages/ProtectedRoutes/Surveys/MySurveys.tsx";
+import CreateAccount from "./pages/ProtectedRoutes/CreateAccount.tsx";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "survey/my-surveys",
         element: <MySurveys/>
+      },
+      {
+        path: "create-account-salesforce",
+        element:<CreateAccount/>
       }
     ],
   },
@@ -57,7 +63,9 @@ createRoot(document.getElementById("root")!).render(
       <QuestionProvider>
         <SurveysProvider>
           <AnswerProvider>
-            <RouterProvider router={router} />
+            <SalesForceProvider>
+              <RouterProvider router={router} />
+            </SalesForceProvider>
           </AnswerProvider>
         </SurveysProvider>
       </QuestionProvider>

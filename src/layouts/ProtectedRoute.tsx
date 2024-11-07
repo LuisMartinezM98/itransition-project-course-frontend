@@ -3,6 +3,7 @@ import { isAuthenticated } from '../helpers/auth';
 import { useAuth } from '../Providers/Providers';
 import Header from '../components/UI/Header';
 import Footer from '../components/UI/Footer';
+import HelpButton from '../components/UI/HelpButton';
 
 const ProtectedRoute: React.FC = () => {
   const { token } = useAuth(); 
@@ -11,6 +12,7 @@ const ProtectedRoute: React.FC = () => {
   return isAuthenticated(token) ? (
     <>
       <Header />
+      <HelpButton/>
       <Outlet />
       <Footer />
     </>
